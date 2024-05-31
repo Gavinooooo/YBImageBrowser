@@ -88,6 +88,9 @@ typedef void (^YBIBImageScrollViewStatusBlock)(YBIBImageData *imageData, UIScrol
 /// 触发裁剪的缩放比例，必须大于等于 1，默认情况内部会动态计算 (仅当图片需要压缩显示时有效)
 @property (nonatomic, assign) CGFloat cuttingZoomScale;
 
+/// 动图是否强制循环播放，默认 YES
+@property (nonatomic) BOOL isForceLoopPlay;
+
 /**
  判断图片是否需要压缩显示
  */

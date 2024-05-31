@@ -84,6 +84,10 @@ typedef BOOL(^YBImageDecodeDecision)(CGSize imageSize, CGFloat scale);
 @property (nonatomic) BOOL preloadAllAnimatedImageFrames;
 
 
+/// 动图是否强制循环播放，默认 YES
+@property (nonatomic) BOOL isForceLoopPlay;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

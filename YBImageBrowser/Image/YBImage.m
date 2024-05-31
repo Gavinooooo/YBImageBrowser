@@ -189,6 +189,7 @@ static CGFloat _NSStringPathScale(NSString *string) {
             _animatedImageMemorySize = _bytesPerFrame * decoder.frameCount;
         }
         self.yy_isDecodedForDisplay = YES;
+        self.isForceLoopPlay = YES;
     }
     return self;
 }
@@ -249,7 +250,7 @@ static CGFloat _NSStringPathScale(NSString *string) {
 }
 
 - (NSUInteger)animatedImageLoopCount {
-    return _decoder.loopCount;
+    return _isForceLoopPlay ? 0:_decoder.loopCount;
 }
 
 - (NSUInteger)animatedImageBytesPerFrame {

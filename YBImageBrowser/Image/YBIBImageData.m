@@ -61,6 +61,7 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
     _cuttingSentinel = [YBIBSentinel new];
     _interactionProfile = [YBIBInteractionProfile new];
     _allowSaveToPhotoAlbum = YES;
+    _isForceLoopPlay = true;
 }
 
 #pragma mark - load data
@@ -161,10 +162,13 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
     void(^dealBlock)(void) = ^{
         if (name.length > 0) {
             image = [YBImage imageNamed:name decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
         } else if (path.length > 0) {
             image = [YBImage imageWithContentsOfFile:path decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
         } else if (data.length > 0) {
             image = [YBImage imageWithData:data scale:UIScreen.mainScreen.scale decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
         }
         YBIB_DISPATCH_ASYNC_MAIN(^{
             __strong typeof(wSelf) self = wSelf;
@@ -247,6 +251,8 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
                 return;
             }
             YBImage *image = [YBImage imageWithData:imageData scale:UIScreen.mainScreen.scale decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
+
             __weak typeof(self) wSelf = self;
             YBIB_DISPATCH_ASYNC_MAIN(^{
                 __strong typeof(wSelf) self = wSelf;
@@ -287,6 +293,8 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
                 return;
             }
             YBImage *image = [YBImage imageWithData:imageData scale:UIScreen.mainScreen.scale decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
+
             YBIB_DISPATCH_ASYNC_MAIN(^{
                 __strong typeof(wSelf) self = wSelf;
                 if (!self) return;
@@ -322,6 +330,7 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
                 return;
             }
             YBImage *image = [YBImage imageWithData:data scale:UIScreen.mainScreen.scale decodeDecision:decision];
+            image.isForceLoopPlay = self->_isForceLoopPlay;
             __weak typeof(self) wSelf = self;
             YBIB_DISPATCH_ASYNC_MAIN(^{
                 __strong typeof(wSelf) self = wSelf;
