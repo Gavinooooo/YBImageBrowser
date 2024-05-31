@@ -13,8 +13,11 @@
 #import "YBIBScreenRotationHandler.h"
 #import "NSObject+YBImageBrowser.h"
 #import "YBImageBrowser+Internal.h"
+
 #if __has_include("YBIBDefaultWebImageMediator.h")
+
 #import "YBIBDefaultWebImageMediator.h"
+
 #endif
 
 @interface YBImageBrowser () <UICollectionViewDelegate, UICollectionViewDataSource>
