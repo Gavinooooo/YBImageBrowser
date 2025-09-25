@@ -70,6 +70,13 @@
 		23F26AD222D7208700C27C21 /* YBIBVideoActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F26AD122D7208700C27C21 /* YBIBVideoActionBar.m */; };
 		23F5A00D23161D51003F0FAE /* YBIBDefaultWebImageMediator.m in Sources */ = {isa = PBXBuildFile; fileRef = 23F5A00C23161D51003F0FAE /* YBIBDefaultWebImageMediator.m */; };
 		23FF103622F6B6FC0091331F /* TestFController.m in Sources */ = {isa = PBXBuildFile; fileRef = 23FF103522F6B6FC0091331F /* TestFController.m */; };
+		328BB1232E85723E0012E24F /* YBIBPerformanceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB11A2E85723E0012E24F /* YBIBPerformanceManager.m */; };
+		328BB1242E85723E0012E24F /* YBIBAdvancedImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB1142E85723E0012E24F /* YBIBAdvancedImageCache.m */; };
+		328BB1252E85723E0012E24F /* YBIBSmartPreloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB1202E85723E0012E24F /* YBIBSmartPreloader.m */; };
+		328BB1262E85723E0012E24F /* YBIBProgressiveLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB11E2E85723E0012E24F /* YBIBProgressiveLoader.m */; };
+		328BB1272E85723E0012E24F /* YBIBPerformanceMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB11C2E85723E0012E24F /* YBIBPerformanceMonitor.m */; };
+		328BB1282E85723E0012E24F /* YBIBPerformanceConfigurator.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB1182E85723E0012E24F /* YBIBPerformanceConfigurator.m */; };
+		328BB1292E85723E0012E24F /* YBIBMemoryAdaptiveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BB1162E85723E0012E24F /* YBIBMemoryAdaptiveManager.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -219,6 +226,21 @@
 		23FC590B23B05EBD00F42054 /* YBIBVideoCell+Internal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "YBIBVideoCell+Internal.h"; sourceTree = "<group>"; };
 		23FF103422F6B6FC0091331F /* TestFController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestFController.h; sourceTree = "<group>"; };
 		23FF103522F6B6FC0091331F /* TestFController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestFController.m; sourceTree = "<group>"; };
+		328BB1132E85723E0012E24F /* YBIBAdvancedImageCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBAdvancedImageCache.h; sourceTree = "<group>"; };
+		328BB1142E85723E0012E24F /* YBIBAdvancedImageCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBAdvancedImageCache.m; sourceTree = "<group>"; };
+		328BB1152E85723E0012E24F /* YBIBMemoryAdaptiveManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBMemoryAdaptiveManager.h; sourceTree = "<group>"; };
+		328BB1162E85723E0012E24F /* YBIBMemoryAdaptiveManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBMemoryAdaptiveManager.m; sourceTree = "<group>"; };
+		328BB1172E85723E0012E24F /* YBIBPerformanceConfigurator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBPerformanceConfigurator.h; sourceTree = "<group>"; };
+		328BB1182E85723E0012E24F /* YBIBPerformanceConfigurator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBPerformanceConfigurator.m; sourceTree = "<group>"; };
+		328BB1192E85723E0012E24F /* YBIBPerformanceManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBPerformanceManager.h; sourceTree = "<group>"; };
+		328BB11A2E85723E0012E24F /* YBIBPerformanceManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBPerformanceManager.m; sourceTree = "<group>"; };
+		328BB11B2E85723E0012E24F /* YBIBPerformanceMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBPerformanceMonitor.h; sourceTree = "<group>"; };
+		328BB11C2E85723E0012E24F /* YBIBPerformanceMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBPerformanceMonitor.m; sourceTree = "<group>"; };
+		328BB11D2E85723E0012E24F /* YBIBProgressiveLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBProgressiveLoader.h; sourceTree = "<group>"; };
+		328BB11E2E85723E0012E24F /* YBIBProgressiveLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBProgressiveLoader.m; sourceTree = "<group>"; };
+		328BB11F2E85723E0012E24F /* YBIBSmartPreloader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBIBSmartPreloader.h; sourceTree = "<group>"; };
+		328BB1202E85723E0012E24F /* YBIBSmartPreloader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YBIBSmartPreloader.m; sourceTree = "<group>"; };
+		328BB1212E85723E0012E24F /* YBImageBrowserPerformance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YBImageBrowserPerformance.h; sourceTree = "<group>"; };
 		97542AA3FE46C41411B15C5D /* Pods_YBImageBrowserDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YBImageBrowserDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B7455F1D491BFCA198544CA1 /* Pods-YBImageBrowserDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YBImageBrowserDemo.debug.xcconfig"; path = "Target Support Files/Pods-YBImageBrowserDemo/Pods-YBImageBrowserDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		F2A1E10DD2C568E5493980E0 /* Pods-YBImageBrowserDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YBImageBrowserDemo.release.xcconfig"; path = "Target Support Files/Pods-YBImageBrowserDemo/Pods-YBImageBrowserDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -253,6 +275,7 @@
 		23ABA26A22D0BAB600535F6A /* YBImageBrowser */ = {
 			isa = PBXGroup;
 			children = (
+				328BB1222E85723E0012E24F /* Performance */,
 				23ABA2A422D0BAB600535F6A /* YBImageBrowser.bundle */,
 				23F5A00A23161D51003F0FAE /* WebImageMediator */,
 				23ABA2BF22D0C22900535F6A /* ToolView */,
@@ -547,6 +570,28 @@
 			path = "用代理配置数据源（以相册为例）";
 			sourceTree = "<group>";
 		};
+		328BB1222E85723E0012E24F /* Performance */ = {
+			isa = PBXGroup;
+			children = (
+				328BB1132E85723E0012E24F /* YBIBAdvancedImageCache.h */,
+				328BB1142E85723E0012E24F /* YBIBAdvancedImageCache.m */,
+				328BB1152E85723E0012E24F /* YBIBMemoryAdaptiveManager.h */,
+				328BB1162E85723E0012E24F /* YBIBMemoryAdaptiveManager.m */,
+				328BB1172E85723E0012E24F /* YBIBPerformanceConfigurator.h */,
+				328BB1182E85723E0012E24F /* YBIBPerformanceConfigurator.m */,
+				328BB1192E85723E0012E24F /* YBIBPerformanceManager.h */,
+				328BB11A2E85723E0012E24F /* YBIBPerformanceManager.m */,
+				328BB11B2E85723E0012E24F /* YBIBPerformanceMonitor.h */,
+				328BB11C2E85723E0012E24F /* YBIBPerformanceMonitor.m */,
+				328BB11D2E85723E0012E24F /* YBIBProgressiveLoader.h */,
+				328BB11E2E85723E0012E24F /* YBIBProgressiveLoader.m */,
+				328BB11F2E85723E0012E24F /* YBIBSmartPreloader.h */,
+				328BB1202E85723E0012E24F /* YBIBSmartPreloader.m */,
+				328BB1212E85723E0012E24F /* YBImageBrowserPerformance.h */,
+			);
+			path = Performance;
+			sourceTree = "<group>";
+		};
 		3B561BDD0EE4EB2318C37D22 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -710,9 +755,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YBImageBrowserDemo/Pods-YBImageBrowserDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-YBImageBrowserDemo/Pods-YBImageBrowserDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -772,6 +821,13 @@
 				23C1F89422D1CB2200793CAA /* YBIBToolViewHandler.m in Sources */,
 				23FF103622F6B6FC0091331F /* TestFController.m in Sources */,
 				23A484A1233CC0500017FA5D /* NSObject+YBImageBrowser.m in Sources */,
+				328BB1232E85723E0012E24F /* YBIBPerformanceManager.m in Sources */,
+				328BB1242E85723E0012E24F /* YBIBAdvancedImageCache.m in Sources */,
+				328BB1252E85723E0012E24F /* YBIBSmartPreloader.m in Sources */,
+				328BB1262E85723E0012E24F /* YBIBProgressiveLoader.m in Sources */,
+				328BB1272E85723E0012E24F /* YBIBPerformanceMonitor.m in Sources */,
+				328BB1282E85723E0012E24F /* YBIBPerformanceConfigurator.m in Sources */,
+				328BB1292E85723E0012E24F /* YBIBMemoryAdaptiveManager.m in Sources */,
 				23ABA2AF22D0BAB700535F6A /* YBIBCopywriter.m in Sources */,
 				23C282F222D5F4540084E9E6 /* YBIBVideoCell.m in Sources */,
 				23ABA2A922D0BAB700535F6A /* YBIBToastView.m in Sources */,

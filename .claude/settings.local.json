@@ -4,7 +4,8 @@
       "Bash(pod:*)",
       "Bash(xcodebuild:*)",
       "WebFetch(domain:github.com)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
