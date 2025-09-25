@@ -50,11 +50,39 @@
     if (_preloadCount == 0) return;
     
     NSInteger left = -(_preloadCount / 2), right = _preloadCount - ABS(left);
+    NSInteger totalPages = [self numberOfCells];
+    
+    // 性能优化：优先级预加载，距离当前页越近优先级越高
+    NSMutableArray *preloadTasks = [NSMutableArray array];
+    
     for (NSInteger i = left; i <= right; ++i) {
         if (i == 0) continue;
-        id<YBIBDataProtocol> targetData = [self dataForCellAtIndex:page + i];
+        NSInteger targetPage = page + i;
+        
+        // 边界检查
+        if (targetPage < 0 || targetPage >= totalPages) continue;
+        
+        NSDictionary *task = @{
+            @"page": @(targetPage),
+            @"priority": @(ABS(i)) // 距离越近优先级数字越小
+        };
+        [preloadTasks addObject:task];
+    }
+    
+    // 按优先级排序
+    [preloadTasks sortUsingComparator:^NSComparisonResult(NSDictionary *obj1, NSDictionary *obj2) {
+        return [obj1[@"priority"] compare:obj2[@"priority"]];
+    }];
+    
+    // 按优先级顺序预加载
+    for (NSDictionary *task in preloadTasks) {
+        NSInteger targetPage = [task[@"page"] integerValue];
+        id<YBIBDataProtocol> targetData = [self dataForCellAtIndex:targetPage];
         if ([targetData respondsToSelector:@selector(yb_preload)]) {
-            [targetData yb_preload];
+            // 性能优化：在后台队列执行预加载，避免阻塞主线程
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [targetData yb_preload];
+            });
         }
     }
 }

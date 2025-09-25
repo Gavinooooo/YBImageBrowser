@@ -56,7 +56,15 @@ static dispatch_queue_t YBIBImageProcessingQueue(void) {
     _defaultLayout = _layout = [YBIBImageLayout new];
     _loadingStatus = YBIBImageLoadingStatusNone;
     _compressingSize = 4096 * 4096;
-    _shouldPreDecodeAsync = YES;
+    // 性能优化：根据设备性能智能设置默认解码策略
+    NSUInteger totalMemoryMB = (NSUInteger)([NSProcessInfo processInfo].physicalMemory / 1024 / 1024);
+    if (totalMemoryMB <= 2048) {
+        // 低内存设备默认关闭异步解码，减少打开延迟
+        _shouldPreDecodeAsync = NO;
+    } else {
+        // 高内存设备可以启用异步解码
+        _shouldPreDecodeAsync = YES;
+    }
     _freezing = NO;
     _cuttingSentinel = [YBIBSentinel new];
     _interactionProfile = [YBIBInteractionProfile new];

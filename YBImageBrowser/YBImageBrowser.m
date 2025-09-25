@@ -17,6 +17,13 @@
 #import "YBIBDefaultWebImageMediator.h"
 #endif
 
+// 性能优化模块导入
+#if __has_include("YBIBPerformanceManager.h")
+#import "YBIBPerformanceManager.h"
+#import "YBIBMemoryAdaptiveManager.h"
+#import "YBIBPerformanceMonitor.h"
+#endif
+
 @interface YBImageBrowser () <UICollectionViewDelegate, UICollectionViewDataSource>
 @property (nonatomic, strong) YBIBCollectionView *collectionView;
 @property (nonatomic, strong) YBIBDataMediator *dataMediator;
@@ -32,6 +39,12 @@
 - (void)dealloc {
     self.hiddenProjectiveView = nil;
     [self showStatusBar];
+    
+    // 性能优化：清理性能监控
+#if __has_include("YBIBPerformanceManager.h")
+    [[YBIBMemoryAdaptiveManager sharedManager] unregisterBrowser:self];
+    [[YBIBPerformanceMonitor sharedMonitor] removeBrowserFromMonitor:self];
+#endif
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -55,6 +68,33 @@
     _autoHideProjectiveView = YES;
 #if __has_include("YBIBDefaultWebImageMediator.h")
     _webImageMediator = [YBIBDefaultWebImageMediator new];
+#endif
+    
+    // 性能优化：根据设备性能自动调整默认配置
+    [self applyPerformanceOptimizations];
+}
+
+- (void)applyPerformanceOptimizations {
+#if __has_include("YBIBPerformanceManager.h")
+    // 自动注册到内存管理器
+    [[YBIBMemoryAdaptiveManager sharedManager] registerBrowser:self];
+    
+    // 根据设备性能自动优化预加载数量
+    YBIBPerformanceManager *perfManager = [YBIBPerformanceManager sharedManager];
+    switch (perfManager.devicePerformanceLevel) {
+        case YBIBPerformanceLevelLow:
+            self.preloadCount = 1;
+            break;
+        case YBIBPerformanceLevelMedium:
+            self.preloadCount = 2;
+            break;
+        case YBIBPerformanceLevelHigh:
+            self.preloadCount = 4;
+            break;
+        case YBIBPerformanceLevelUltra:
+            self.preloadCount = 6;
+            break;
+    }
 #endif
 }
 

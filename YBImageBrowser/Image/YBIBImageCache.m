@@ -51,7 +51,26 @@ static void *YBIBImageCacheKey = &YBIBImageCacheKey;
     self = [super init];
     if (self) {
         _imageCache = [NSCache new];
-        _imageCache.countLimit = _imageCacheCountLimit = YBIBLowMemory() ? 6 : 12;
+        
+        // 性能优化：根据设备性能和内存情况智能设置缓存大小
+        NSUInteger totalMemoryMB = (NSUInteger)([NSProcessInfo processInfo].physicalMemory / 1024 / 1024);
+        NSUInteger cacheLimit;
+        
+        if (totalMemoryMB <= 1024) {
+            // 1GB及以下设备
+            cacheLimit = YBIBLowMemory() ? 3 : 6;
+        } else if (totalMemoryMB <= 2048) {
+            // 2GB设备
+            cacheLimit = YBIBLowMemory() ? 6 : 12;
+        } else if (totalMemoryMB <= 4096) {
+            // 4GB设备
+            cacheLimit = YBIBLowMemory() ? 8 : 18;
+        } else {
+            // 6GB及以上设备
+            cacheLimit = YBIBLowMemory() ? 12 : 25;
+        }
+        
+        _imageCache.countLimit = _imageCacheCountLimit = cacheLimit;
         _residentCache = [NSMutableDictionary dictionary];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
     }
