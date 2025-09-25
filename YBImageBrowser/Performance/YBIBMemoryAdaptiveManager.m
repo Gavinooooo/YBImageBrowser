@@ -116,9 +116,6 @@
         [_monitoringTimer invalidate];
     }
     
-          (unsigned long)_warningThresholdMB,
-          (unsigned long)_criticalThresholdMB, 
-          (unsigned long)_urgentThresholdMB);
     
     _monitoringTimer = [NSTimer scheduledTimerWithTimeInterval:_monitoringInterval
                                                         target:self
@@ -210,9 +207,6 @@
     [self optimizeForPressureLevel:_currentPressureLevel];
     NSUInteger memoryAfter = [self availableMemoryMB];
     
-          (unsigned long)memoryBefore, 
-          (unsigned long)memoryAfter,
-          (unsigned long)(memoryAfter - memoryBefore));
 }
 
 - (void)optimizeForPressureLevel:(YBIBMemoryPressureLevel)level {

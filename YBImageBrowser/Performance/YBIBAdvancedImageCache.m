@@ -152,7 +152,6 @@
             });
         }
         
-              key, (unsigned long)compressionLevel, (unsigned long)(item.memorySize/1024));
     });
 }
 
