@@ -99,7 +99,7 @@
     
     // 更新平均滑动速度
     if (_lastScrollTime > 0) {
-        CGFloat timeDelta = currentTime - _lastScrollTime;
+        // CGFloat timeDelta = currentTime - _lastScrollTime; // 暂未使用
         _averageScrollVelocity = (_averageScrollVelocity * 0.7) + (ABS(velocity) * 0.3);
     }
     _lastScrollTime = currentTime;

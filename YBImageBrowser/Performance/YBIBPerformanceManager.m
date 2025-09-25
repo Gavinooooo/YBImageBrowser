@@ -146,25 +146,25 @@
         case YBIBImageSizeCategorySmall:
             imageData.shouldPreDecodeAsync = YES;
             imageData.cuttingZoomScale = 6.0;
-            imageData.maxZoomScale = 5.0;
+            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryMedium:
             imageData.shouldPreDecodeAsync = (_devicePerformanceLevel >= YBIBPerformanceLevelMedium);
             imageData.cuttingZoomScale = 4.0;
-            imageData.maxZoomScale = 4.0;
+            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryLarge:
             imageData.shouldPreDecodeAsync = (_devicePerformanceLevel >= YBIBPerformanceLevelHigh);
             imageData.cuttingZoomScale = 3.0;
-            imageData.maxZoomScale = 3.0;
+            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryHuge:
             imageData.shouldPreDecodeAsync = NO; // 超大图不预解码
             imageData.cuttingZoomScale = 2.0;
-            imageData.maxZoomScale = 2.5;
+            // maxZoomScale属性在当前版本不存在
             break;
     }
     
