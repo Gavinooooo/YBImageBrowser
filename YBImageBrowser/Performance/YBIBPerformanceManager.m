@@ -125,17 +125,15 @@
     // 设置缓存数量
     browser.ybib_imageCache.imageCacheCountLimit = [self recommendedCacheCountForImageSize:averageImageSize];
     
-    // 根据图片数量调整数据缓存
+    // 数据缓存限制通过其他方式优化，暂不直接设置dataMediator
     NSUInteger dataCacheCount = MIN(50, MAX(10, expectedImageCount / 2));
-    if ([browser.dataMediator respondsToSelector:@selector(setDataCacheCountLimit:)]) {
-        [(id)browser.dataMediator setDataCacheCountLimit:dataCacheCount];
-    }
+    // 注意: dataMediator 是私有属性，无法直接访问，数据缓存通过预加载策略间接优化
     
     NSLog(@"🚀 YBImageBrowser 性能优化配置:");
     NSLog(@"   设备等级: %@", [self performanceLevelString:_devicePerformanceLevel]);
     NSLog(@"   预加载数量: %lu", (unsigned long)browser.preloadCount);
     NSLog(@"   图片缓存: %lu", (unsigned long)browser.ybib_imageCache.imageCacheCountLimit);
-    NSLog(@"   数据缓存: %lu", (unsigned long)dataCacheCount);
+    NSLog(@"   建议数据缓存: %lu", (unsigned long)dataCacheCount);
 }
 
 - (void)optimizeImageData:(YBIBImageData *)imageData imageSize:(CGSize)imageSize {
