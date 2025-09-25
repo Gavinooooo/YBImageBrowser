@@ -176,7 +176,7 @@
                                                direction:(YBIBScrollDirection)direction
                                                    count:(NSUInteger)count {
     NSMutableArray *pages = [NSMutableArray array];
-    NSInteger totalPages = [self.browser.dataMediator numberOfCells];
+    NSInteger totalPages = self.browser.dataSourceArray.count;
     
     if (direction == YBIBScrollDirectionRight) {
         // 向右滑动，预加载右侧页面
@@ -250,7 +250,11 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) return;
         
-        id<YBIBDataProtocol> data = [strongSelf.browser.dataMediator dataForCellAtIndex:page];
+        // 检查数组边界
+        if (page < 0 || page >= strongSelf.browser.dataSourceArray.count) {
+            return;
+        }
+        id<YBIBDataProtocol> data = strongSelf.browser.dataSourceArray[page];
         if ([data respondsToSelector:@selector(yb_preload)]) {
             [data yb_preload];
             
