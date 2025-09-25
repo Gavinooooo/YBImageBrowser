@@ -68,7 +68,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
     self.completionBlock = completionBlock;
     self.currentPhase = YBIBLoadingPhaseIdle;
     
-    NSLog(@"🔄 开始渐进式加载: %@", _imageData.imageURL.absoluteString);
     
     if (!_enableProgressiveLoading) {
         // 直接加载原图
@@ -218,7 +217,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
 - (void)completeLoading {
     UIImage *finalImage = _originalImage ?: _mediumQualityImage ?: _thumbnailImage;
     
-    NSLog(@"✅ 渐进式加载完成，最终图片: %@", 
           _originalImage ? @"原图" : (_mediumQualityImage ? @"中等质量" : @"缩略图"));
     
     if (self.completionBlock) {
@@ -253,7 +251,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
         strongSelf.currentTask = nil;
         
         if (error) {
-            NSLog(@"⚠️ 下载失败: %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(nil);
             });
@@ -301,7 +298,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
         strongSelf.currentTask = nil;
         
         if (error) {
-            NSLog(@"⚠️ 原图下载失败: %@", error.localizedDescription);
             dispatch_async(dispatch_get_main_queue(), ^{
                 completion(nil);
             });
@@ -429,7 +425,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
 - (void)provideIntermediateResult:(UIImage *)image {
     // 这里可以通过通知或回调提供中间结果
     // 让UI能够立即显示低质量图片
-    NSLog(@"📸 提供中间结果图片: %@", NSStringFromCGSize(image.size));
 }
 
 @end

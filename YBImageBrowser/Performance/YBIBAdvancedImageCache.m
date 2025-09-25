@@ -152,7 +152,6 @@
             });
         }
         
-        NSLog(@"💾 图片已缓存: %@ (压缩等级:%lu, 内存:%luKB)", 
               key, (unsigned long)compressionLevel, (unsigned long)(item.memorySize/1024));
     });
 }
@@ -332,7 +331,6 @@
         [self.memoryCache removeAllObjects];
         [self.accessOrder removeAllObjects];
         self.totalMemoryUsage = 0;
-        NSLog(@"🧹 内存缓存已清理");
     });
 }
 
@@ -344,7 +342,6 @@
                                   withIntermediateDirectories:YES
                                                    attributes:nil
                                                         error:nil];
-        NSLog(@"🧹 磁盘缓存已清理");
     });
 }
 
@@ -510,7 +507,6 @@
 #pragma mark - 通知处理
 
 - (void)handleMemoryWarning:(NSNotification *)notification {
-    NSLog(@"⚠️ 收到内存警告，执行缓存清理");
     
     dispatch_barrier_async(_cacheQueue, ^{
         // 清理一半的内存缓存

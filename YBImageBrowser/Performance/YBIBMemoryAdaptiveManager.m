@@ -116,8 +116,6 @@
         [_monitoringTimer invalidate];
     }
     
-    NSLog(@"🔍 开始内存自适应监控 (间隔: %.1fs)", _monitoringInterval);
-    NSLog(@"📊 内存阈值 - 警告:%luMB, 严重:%luMB, 紧急:%luMB", 
           (unsigned long)_warningThresholdMB,
           (unsigned long)_criticalThresholdMB, 
           (unsigned long)_urgentThresholdMB);
@@ -133,7 +131,6 @@
     if (_monitoringTimer) {
         [_monitoringTimer invalidate];
         _monitoringTimer = nil;
-        NSLog(@"🔍 内存监控已停止");
     }
 }
 
@@ -145,7 +142,6 @@
         YBIBMemoryPressureLevel oldLevel = _currentPressureLevel;
         _currentPressureLevel = newLevel;
         
-        NSLog(@"🚨 内存压力变化: %@ → %@ (可用: %luMB)", 
               [self pressureLevelString:oldLevel],
               [self pressureLevelString:newLevel],
               (unsigned long)availableMemory);
@@ -205,14 +201,12 @@
     if (!browser) return;
     
     [_registeredBrowsers addObject:browser];
-    NSLog(@"📝 注册浏览器实例，当前总数: %lu", (unsigned long)_registeredBrowsers.count);
 }
 
 - (void)unregisterBrowser:(YBImageBrowser *)browser {
     if (!browser) return;
     
     [_registeredBrowsers removeObject:browser];
-    NSLog(@"📝 注销浏览器实例，当前总数: %lu", (unsigned long)_registeredBrowsers.count);
 }
 
 - (void)optimizeMemoryUsage {
@@ -220,7 +214,6 @@
     [self optimizeForPressureLevel:_currentPressureLevel];
     NSUInteger memoryAfter = [self availableMemoryMB];
     
-    NSLog(@"🔧 手动内存优化完成: %luMB → %luMB (+%luMB)", 
           (unsigned long)memoryBefore, 
           (unsigned long)memoryAfter,
           (unsigned long)(memoryAfter - memoryBefore));
@@ -329,7 +322,6 @@
         [_optimizationHistory removeObjectAtIndex:0];
     }
     
-    NSLog(@"📋 记录优化: %@ | %luMB→%luMB | %@",
           [self pressureLevelString:level],
           (unsigned long)memoryBefore,
           (unsigned long)memoryAfter,
@@ -384,7 +376,6 @@
 #pragma mark - 通知处理
 
 - (void)handleSystemMemoryWarning:(NSNotification *)notification {
-    NSLog(@"🚨 系统内存警告，立即执行优化");
     
     // 强制设置为紧急级别并优化
     _currentPressureLevel = YBIBMemoryPressureLevelUrgent;

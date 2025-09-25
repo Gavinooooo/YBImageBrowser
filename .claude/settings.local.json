@@ -5,7 +5,11 @@
       "Bash(xcodebuild:*)",
       "WebFetch(domain:github.com)",
       "Bash(git add:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(clang:*)",
+      "Bash(git tag:*)",
+      "Read(//Users/gavinliu/Documents/Project/yulimeta-ios-test-moonring/AppDev/Chat/ChatClient/**)",
+      "Bash(find:*)"
     ],
     "deny": [],
     "ask": []

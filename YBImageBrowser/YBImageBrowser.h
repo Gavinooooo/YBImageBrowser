@@ -16,6 +16,7 @@
 #import "YBIBToolViewHandler.h"
 #import "YBIBWebImageMediator.h"
 #import "YBIBImageData.h"
+#import "YBIBCopywriter.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -105,6 +106,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// 核心集合视图
 @property (nonatomic, strong, readonly) YBIBCollectionView *collectionView;
+
+#pragma mark - 国际化设置
+
+/// 设置语言类型
++ (void)setLanguageType:(YBIBCopywriterType)languageType;
+
+/// 获取当前语言类型
++ (YBIBCopywriterType)currentLanguageType;
 
 @end
 

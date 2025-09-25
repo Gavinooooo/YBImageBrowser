@@ -13,8 +13,14 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger, YBIBCopywriterType) {
     /// 简体中文
     YBIBCopywriterTypeSimplifiedChinese,
+    /// 繁体中文
+    YBIBCopywriterTypeTraditionalChinese,
     /// 英文
-    YBIBCopywriterTypeEnglish
+    YBIBCopywriterTypeEnglish,
+    /// 日文
+    YBIBCopywriterTypeJapanese,
+    /// 韩文
+    YBIBCopywriterTypeKorean
 };
 
 /**

@@ -125,7 +125,6 @@
                                                        userInfo:nil
                                                         repeats:YES];
     
-    NSLog(@"📊 性能监控已启动");
 }
 
 - (void)stopMonitoring {
@@ -143,7 +142,6 @@
         _performanceTimer = nil;
     }
     
-    NSLog(@"📊 性能监控已停止");
 }
 
 #pragma mark - 浏览器监控
@@ -152,14 +150,12 @@
     if (!browser) return;
     
     [_monitoredBrowsers addObject:browser];
-    NSLog(@"📝 添加浏览器到性能监控，当前总数: %lu", (unsigned long)_monitoredBrowsers.count);
 }
 
 - (void)removeBrowserFromMonitor:(YBImageBrowser *)browser {
     if (!browser) return;
     
     [_monitoredBrowsers removeObject:browser];
-    NSLog(@"📝 从性能监控移除浏览器，当前总数: %lu", (unsigned long)_monitoredBrowsers.count);
 }
 
 #pragma mark - 性能指标记录
@@ -220,11 +216,9 @@
 
 - (void)recordTransitionAnimation:(NSTimeInterval)duration {
     // 可以扩展为动画性能记录
-    NSLog(@"🎬 转场动画耗时: %.3fs", duration);
 }
 
 - (void)recordMemoryPeak:(NSUInteger)memoryUsageMB {
-    NSLog(@"📈 内存使用峰值: %luMB", (unsigned long)memoryUsageMB);
 }
 
 #pragma mark - 实时监控
@@ -422,7 +416,6 @@
     _totalSwitchTime = 0;
     _monitoringStartTime = [[NSDate date] timeIntervalSince1970];
     
-    NSLog(@"📊 性能统计数据已重置");
 }
 
 #pragma mark - 性能分析
@@ -518,7 +511,6 @@
                                                          error:&error];
     
     if (error) {
-        NSLog(@"❌ JSON导出失败: %@", error.localizedDescription);
         return nil;
     }
     

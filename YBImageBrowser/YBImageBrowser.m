@@ -575,4 +575,14 @@
     return self.rotationHandler.currentOrientation;
 }
 
+#pragma mark - 国际化设置
+
++ (void)setLanguageType:(YBIBCopywriterType)languageType {
+    [YBIBCopywriter sharedCopywriter].type = languageType;
+}
+
++ (YBIBCopywriterType)currentLanguageType {
+    return [YBIBCopywriter sharedCopywriter].type;
+}
+
 @end

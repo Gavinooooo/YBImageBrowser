@@ -25,9 +25,6 @@
     
     if (!browser) return;
     
-    NSLog(@"🚀 开始一键性能优化...");
-    NSLog(@"   图片数量: %ld", (long)imageCount);
-    NSLog(@"   高级功能: %@", useAdvancedFeatures ? @"启用" : @"禁用");
     
     // 1. 基础性能优化
     YBIBPerformanceManager *manager = [YBIBPerformanceManager sharedManager];
@@ -46,7 +43,6 @@
         [self optimizeForFewImages:browser];
     }
     
-    NSLog(@"✅ 一键性能优化完成");
 }
 
 + (void)optimizeForLargeImages:(YBImageBrowser *)browser
@@ -54,7 +50,6 @@
     
     if (!browser) return;
     
-    NSLog(@"🖼️ 开始大图浏览优化 (平均大小: %.1fMB)", averageImageSizeMB);
     
     // 根据图片大小调整策略
     if (averageImageSizeMB > 10) {
@@ -77,7 +72,6 @@
     // 注册内存监控
     [[YBIBMemoryAdaptiveManager sharedManager] registerBrowser:browser];
     
-    NSLog(@"✅ 大图浏览优化完成");
 }
 
 + (void)optimizeForManyImages:(YBImageBrowser *)browser
@@ -85,7 +79,6 @@
     
     if (!browser) return;
     
-    NSLog(@"📚 开始多图浏览优化 (图片数量: %ld)", (long)imageCount);
     
     // 限制内存使用
     NSUInteger cacheLimit = MAX(5, MIN(15, imageCount / 10));
@@ -99,13 +92,11 @@
     [memoryManager registerBrowser:browser];
     [memoryManager startMemoryMonitoring];
     
-    NSLog(@"✅ 多图浏览优化完成");
 }
 
 + (void)optimizeForLowEndDevice:(YBImageBrowser *)browser {
     if (!browser) return;
     
-    NSLog(@"📱 开始低性能设备优化");
     
     // 最小化配置
     browser.preloadCount = 1;
@@ -122,13 +113,11 @@
     [memoryManager registerBrowser:browser];
     [memoryManager startMemoryMonitoring];
     
-    NSLog(@"✅ 低性能设备优化完成");
 }
 
 #pragma mark - 场景化配置
 
 + (void)configureForPhotoAlbum:(YBImageBrowser *)browser {
-    NSLog(@"📸 配置相册浏览模式");
     
     // 相册图片通常较大，但本地访问快
     browser.preloadCount = 3;
@@ -137,11 +126,9 @@
     // 启用性能监控
     [[YBIBPerformanceMonitor sharedMonitor] addBrowserToMonitor:browser];
     
-    NSLog(@"✅ 相册浏览配置完成");
 }
 
 + (void)configureForNetworkImages:(YBImageBrowser *)browser {
-    NSLog(@"🌐 配置网络图片浏览模式");
     
     // 网络图片需要考虑下载时间
     browser.preloadCount = 4; // 增加预加载以减少等待
@@ -150,11 +137,9 @@
     // 启用高级缓存和渐进式加载
     [self enableAdvancedFeatures:browser];
     
-    NSLog(@"✅ 网络图片浏览配置完成");
 }
 
 + (void)configureForProductImages:(YBImageBrowser *)browser {
-    NSLog(@"🛍️ 配置商品图片浏览模式");
     
     // 商品图片通常需要高质量展示
     browser.preloadCount = 2;
@@ -163,11 +148,9 @@
     // 启用内存管理
     [[YBIBMemoryAdaptiveManager sharedManager] registerBrowser:browser];
     
-    NSLog(@"✅ 商品图片浏览配置完成");
 }
 
 + (void)configureForSocialMedia:(YBImageBrowser *)browser {
-    NSLog(@"📱 配置社交媒体模式");
     
     // 社交媒体图片数量多，需要平衡性能和内存
     browser.preloadCount = 3;
@@ -176,7 +159,6 @@
     // 启用全套性能优化
     [self enableFullPerformanceMode:browser];
     
-    NSLog(@"✅ 社交媒体配置完成");
 }
 
 #pragma mark - 高级配置
@@ -184,7 +166,6 @@
 + (void)applyCustomConfiguration:(YBImageBrowser *)browser config:(NSDictionary *)config {
     if (!browser || !config) return;
     
-    NSLog(@"⚙️ 应用自定义配置: %@", config);
     
     // 预加载数量
     NSNumber *preloadCount = config[@"preloadCount"];
@@ -211,7 +192,6 @@
         [[YBIBPerformanceMonitor sharedMonitor] startMonitoring];
     }
     
-    NSLog(@"✅ 自定义配置应用完成");
 }
 
 + (NSDictionary *)recommendedConfigurationForImageCount:(NSInteger)imageCount
@@ -240,7 +220,6 @@
     
     if (!imageDatas || imageDatas.count == 0) return;
     
-    NSLog(@"🔧 批量优化 %lu 个图片数据 (场景: %@)", (unsigned long)imageDatas.count, scenario);
     
     // 异步批量优化，避免阻塞主线程造成CPU峰值
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -249,7 +228,6 @@
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"✅ 批量优化完成");
         });
     });
 }
@@ -284,7 +262,6 @@
 + (void)enableFullPerformanceMode:(YBImageBrowser *)browser {
     if (!browser) return;
     
-    NSLog(@"🎯 启用完整性能模式");
     
     // 1. 启用所有管理器
     YBIBPerformanceManager *perfManager = [YBIBPerformanceManager sharedManager];
@@ -301,18 +278,15 @@
     // 2. 启用高级功能
     [self enableAdvancedFeatures:browser];
     
-    NSLog(@"✅ 完整性能模式已启用");
 }
 
 + (void)disablePerformanceMode:(YBImageBrowser *)browser {
     if (!browser) return;
     
-    NSLog(@"🔇 禁用性能监控模式");
     
     [[YBIBMemoryAdaptiveManager sharedManager] unregisterBrowser:browser];
     [[YBIBPerformanceMonitor sharedMonitor] removeBrowserFromMonitor:browser];
     
-    NSLog(@"✅ 性能监控模式已禁用");
 }
 
 #pragma mark - 配置验证

@@ -78,7 +78,6 @@
 #pragma mark - 预加载策略
 
 - (void)startSmartPreloading {
-    NSLog(@"🧠 启动智能预加载策略");
 }
 
 - (void)stopSmartPreloading {
@@ -269,7 +268,6 @@
                 [strongSelf.preloadedPages addObject:@(page)];
                 strongSelf.successfulPreloads++;
                 
-                NSLog(@"✅ 预加载完成 Page %ld (优先级: %ld)", (long)page, (long)priority);
             });
         }
         
@@ -292,7 +290,6 @@
     [_preloadedPages minusSet:toRemove];
     
     if (toRemove.count > 0) {
-        NSLog(@"🧹 清理了 %lu 个远距离预加载缓存", (unsigned long)toRemove.count);
     }
 }
 
@@ -302,7 +299,6 @@
     _isWiFiConnected = isWiFi;
     _isSlowNetwork = isSlowNetwork;
     
-    NSLog(@"📶 网络状态更新: WiFi=%@, Slow=%@", 
           isWiFi ? @"YES" : @"NO", 
           isSlowNetwork ? @"YES" : @"NO");
 }
@@ -323,7 +319,6 @@
 #pragma mark - 内存管理
 
 - (void)handleMemoryWarning:(NSNotification *)notification {
-    NSLog(@"⚠️ 内存警告，清理预加载缓存");
     
     // 清理所有预加载状态
     [_preloadingPages removeAllObjects];

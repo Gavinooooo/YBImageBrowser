@@ -24,8 +24,7 @@ dispatch_async(queue, block);\
 #define YBIB_CODE_EXEC_TIME(KEY, ...) \
 CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent(); \
 __VA_ARGS__ \
-CFAbsoluteTime linkTime = (CFAbsoluteTimeGetCurrent() - startTime); \
-NSLog(@"%@ Time-Consuming: %fms", KEY, linkTime * 1000.0);
+CFAbsoluteTime linkTime = (CFAbsoluteTimeGetCurrent() - startTime);
 
 
 UIWindow * _Nonnull YBIBNormalWindow(void);

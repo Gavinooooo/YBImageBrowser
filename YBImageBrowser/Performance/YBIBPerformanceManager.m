@@ -129,11 +129,6 @@
     NSUInteger dataCacheCount = MIN(50, MAX(10, expectedImageCount / 2));
     // 注意: dataMediator 是私有属性，无法直接访问，数据缓存通过预加载策略间接优化
     
-    NSLog(@"🚀 YBImageBrowser 性能优化配置:");
-    NSLog(@"   设备等级: %@", [self performanceLevelString:_devicePerformanceLevel]);
-    NSLog(@"   预加载数量: %lu", (unsigned long)browser.preloadCount);
-    NSLog(@"   图片缓存: %lu", (unsigned long)browser.ybib_imageCache.imageCacheCountLimit);
-    NSLog(@"   建议数据缓存: %lu", (unsigned long)dataCacheCount);
 }
 
 - (void)optimizeImageData:(YBIBImageData *)imageData imageSize:(CGSize)imageSize {
@@ -313,7 +308,6 @@
 }
 
 - (void)handleMemoryPressure {
-    NSLog(@"⚠️ 检测到内存压力，启动紧急优化...");
     
     // 通知所有YBImageBrowser实例降低缓存
     [[NSNotificationCenter defaultCenter] postNotificationName:@"YBIBPerformanceEmergencyOptimization"
