@@ -298,9 +298,6 @@
 - (void)updateNetworkStatus:(BOOL)isWiFi isSlowNetwork:(BOOL)isSlowNetwork {
     _isWiFiConnected = isWiFi;
     _isSlowNetwork = isSlowNetwork;
-    
-          isWiFi ? @"YES" : @"NO", 
-          isSlowNetwork ? @"YES" : @"NO");
 }
 
 #pragma mark - 优先级预加载

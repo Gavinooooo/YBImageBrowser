@@ -217,8 +217,6 @@ typedef NS_ENUM(NSUInteger, YBIBLoadingPhase) {
 - (void)completeLoading {
     UIImage *finalImage = _originalImage ?: _mediumQualityImage ?: _thumbnailImage;
     
-          _originalImage ? @"原图" : (_mediumQualityImage ? @"中等质量" : @"缩略图"));
-    
     if (self.completionBlock) {
         self.completionBlock(finalImage, nil);
     }

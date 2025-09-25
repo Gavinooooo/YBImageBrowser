@@ -142,10 +142,6 @@
         YBIBMemoryPressureLevel oldLevel = _currentPressureLevel;
         _currentPressureLevel = newLevel;
         
-              [self pressureLevelString:oldLevel],
-              [self pressureLevelString:newLevel],
-              (unsigned long)availableMemory);
-        
         [self handlePressureLevelChange:newLevel];
     }
 }
@@ -321,11 +317,6 @@
     if (_optimizationHistory.count > 100) {
         [_optimizationHistory removeObjectAtIndex:0];
     }
-    
-          [self pressureLevelString:level],
-          (unsigned long)memoryBefore,
-          (unsigned long)memoryAfter,
-          record.actionTaken);
 }
 
 - (void)setMemoryPressureHandler:(YBIBMemoryPressureHandler)handler {
