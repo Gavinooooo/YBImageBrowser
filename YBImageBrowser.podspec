@@ -5,23 +5,24 @@ Pod::Spec.new do |s|
 
   s.name         = "YBImageBrowser"
 
-  s.version      = "3.0.9"
+  s.version      = "3.0.10"
 
-  s.summary      = "iOS image browser / iOS 图片浏览器"
+  s.summary      = "iOS image browser with Performance optimization / iOS 图片浏览器 - 性能优化版"
 
   s.description  = <<-DESC
   					iOS 图片浏览器，功能强大，易于拓展，极致的性能优化和严格的内存控制让其运行更加的流畅和稳健。
+  					新增 Performance 模块，包含智能预加载、内存自适应、渐进式加载等企业级性能优化功能。
                    DESC
 
-  s.homepage     = "https://github.com/indulgeIn"
+  s.homepage     = "https://github.com/Gavinooooo/YBImageBrowser"
 
   s.license      = "MIT"
 
-  s.author       = { "杨波" => "1106355439@qq.com" }
+  s.author       = { "Gavin Liu" => "gavin@example.com" }
 
   s.platform     = :ios, "8.0"
 
-  s.source       = { :git => "https://github.com/indulgeIn/YBImageBrowser.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/Gavinooooo/YBImageBrowser.git", :tag => "#{s.version}" }
 
   s.requires_arc = true
 
