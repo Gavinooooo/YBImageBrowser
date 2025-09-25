@@ -242,11 +242,16 @@
     
     NSLog(@"🔧 批量优化 %lu 个图片数据 (场景: %@)", (unsigned long)imageDatas.count, scenario);
     
-    for (YBIBImageData *imageData in imageDatas) {
-        [self optimizeImageDataForScenario:imageData scenario:scenario];
-    }
-    
-    NSLog(@"✅ 批量优化完成");
+    // 异步批量优化，避免阻塞主线程造成CPU峰值
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (YBIBImageData *imageData in imageDatas) {
+            [self optimizeImageDataForScenario:imageData scenario:scenario];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"✅ 批量优化完成");
+        });
+    });
 }
 
 + (void)smartConfigureImageData:(YBIBImageData *)imageData withURL:(NSURL *)imageURL {

@@ -20,6 +20,7 @@
 @property (nonatomic, strong) NSMutableSet<NSNumber *> *preloadingPages;
 @property (nonatomic, strong) NSMutableSet<NSNumber *> *preloadedPages;
 @property (nonatomic, strong) dispatch_queue_t preloadQueue;
+@property (nonatomic, strong) dispatch_semaphore_t concurrentSemaphore;
 
 // 滑动行为分析
 @property (nonatomic, assign) YBIBScrollDirection lastScrollDirection;
@@ -48,6 +49,7 @@
         _preloadingPages = [NSMutableSet set];
         _preloadedPages = [NSMutableSet set];
         _preloadQueue = dispatch_queue_create("com.ybib.smart_preload", DISPATCH_QUEUE_CONCURRENT);
+        _concurrentSemaphore = dispatch_semaphore_create(2); // 限制最多2个并发解码
         
         [self setupNetworkMonitoring];
         [self setupMemoryNotifications];
@@ -250,8 +252,12 @@
         __strong typeof(weakSelf) strongSelf = weakSelf;
         if (!strongSelf) return;
         
+        // 信号量控制并发数量，避免CPU峰值
+        dispatch_semaphore_wait(strongSelf.concurrentSemaphore, DISPATCH_TIME_FOREVER);
+        
         // 检查数组边界
         if (page < 0 || page >= strongSelf.browser.dataSourceArray.count) {
+            dispatch_semaphore_signal(strongSelf.concurrentSemaphore);
             return;
         }
         id<YBIBDataProtocol> data = strongSelf.browser.dataSourceArray[page];
@@ -266,6 +272,9 @@
                 NSLog(@"✅ 预加载完成 Page %ld (优先级: %ld)", (long)page, (long)priority);
             });
         }
+        
+        // 释放信号量
+        dispatch_semaphore_signal(strongSelf.concurrentSemaphore);
     });
 }
 

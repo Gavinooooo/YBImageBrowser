@@ -144,25 +144,23 @@
         case YBIBImageSizeCategorySmall:
             imageData.shouldPreDecodeAsync = YES;
             imageData.cuttingZoomScale = 6.0;
-            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryMedium:
-            imageData.shouldPreDecodeAsync = (_devicePerformanceLevel >= YBIBPerformanceLevelMedium);
+            // 强制异步解码，避免主线程阻塞
+            imageData.shouldPreDecodeAsync = YES;
             imageData.cuttingZoomScale = 4.0;
-            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryLarge:
-            imageData.shouldPreDecodeAsync = (_devicePerformanceLevel >= YBIBPerformanceLevelHigh);
+            // 大图也使用异步解码，但优先级更高的设备才启用
+            imageData.shouldPreDecodeAsync = (_devicePerformanceLevel >= YBIBPerformanceLevelMedium);
             imageData.cuttingZoomScale = 3.0;
-            // maxZoomScale属性在当前版本不存在
             break;
             
         case YBIBImageSizeCategoryHuge:
-            imageData.shouldPreDecodeAsync = NO; // 超大图不预解码
+            imageData.shouldPreDecodeAsync = NO; // 超大图不预解码，避免CPU峰值
             imageData.cuttingZoomScale = 2.0;
-            // maxZoomScale属性在当前版本不存在
             break;
     }
     
@@ -202,7 +200,7 @@
                                       averageSize:(YBIBImageSizeCategory)averageSize {
     NSUInteger basePreload = 2;
     
-    // 根据设备性能调整
+    // 根据设备性能调整 - 降低初始预加载避免CPU峰值
     switch (_devicePerformanceLevel) {
         case YBIBPerformanceLevelLow:
             basePreload = 1;
@@ -211,10 +209,10 @@
             basePreload = 2;
             break;
         case YBIBPerformanceLevelHigh:
-            basePreload = 4;
+            basePreload = 3; // 降低
             break;
         case YBIBPerformanceLevelUltra:
-            basePreload = 6;
+            basePreload = 4; // 从6降低到4，避免CPU峰值
             break;
     }
     
