@@ -80,9 +80,16 @@ extern CGImageRef YYCGImageCreateDecodedCopy(CGImageRef imageRef, BOOL decodeFor
 - (void)loadThumbImage {
     if (self.thumbImage) {
         [self.delegate yb_videoData:self readyForThumbImage:self.thumbImage];
-    } else if (self.projectiveView && [self.projectiveView isKindOfClass:UIImageView.self] && ((UIImageView *)self.projectiveView).image) {
-        self.thumbImage = ((UIImageView *)self.projectiveView).image;
-        [self.delegate yb_videoData:self readyForThumbImage:self.thumbImage];
+    } else if (self.projectiveView && [self.projectiveView isKindOfClass:UIImageView.self]) {
+        YBIB_DISPATCH_ASYNC_MAIN(^{
+            UIImage *image = ((UIImageView *)self.projectiveView).image;
+            if (image) {
+                self.thumbImage = image;
+                [self.delegate yb_videoData:self readyForThumbImage:self.thumbImage];
+            } else {
+                [self loadThumbImage_firstFrame];
+            }
+        })
     } else {
         [self loadThumbImage_firstFrame];
     }

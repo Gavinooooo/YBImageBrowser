@@ -335,11 +335,15 @@
     if (!asset) return;
     if (self.needAutoPlay) {
         if (![self autoPlay]) {
-            self.playButton.hidden = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.playButton.hidden = NO;
+            });
         }
         self.needAutoPlay = NO;
     } else {
-        self.playButton.hidden = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.playButton.hidden = NO;
+        });
     }
 }
 - (AVAsset *)asset {
