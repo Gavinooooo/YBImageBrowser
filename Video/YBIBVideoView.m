@@ -350,9 +350,12 @@
         }
         self.needAutoPlay = NO;
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.playButton.hidden = NO;
-        });
+        // 只有在 autoPlayCount 为 0 时才显示播放按钮（表示不会自动播放）
+        if (self.autoPlayCount == 0) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.playButton.hidden = NO;
+            });
+        }
     }
 }
 - (AVAsset *)asset {
