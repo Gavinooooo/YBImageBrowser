@@ -341,9 +341,12 @@
         }
         self.needAutoPlay = NO;
     } else {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.playButton.hidden = NO;
-        });
+        // 只有在没有准备播放时才显示播放按钮
+        if (!_preparingPlay && !_playing) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.playButton.hidden = NO;
+            });
+        }
     }
 }
 - (AVAsset *)asset {
