@@ -66,7 +66,35 @@
     UIEdgeInsets padding = YBIBPaddingByBrowserOrientation(orientation);
     CGFloat width = containerSize.width - padding.left - padding.right, height = containerSize.height;
     self.topBar.frame = CGRectMake(padding.left, padding.top, width, [YBIBVideoTopBar defaultHeight]);
-    self.actionBar.frame = CGRectMake(padding.left, height - [YBIBVideoActionBar defaultHeight] - padding.bottom - 10, width, [YBIBVideoActionBar defaultHeight]);
+
+    // 优化底部播放条布局：基于修复后的安全区域获取方法
+    // 直接获取当前安全区域高度，智能调整底部间距
+    CGFloat currentSafeAreaBottom = 0;
+    if (@available(iOS 11.0, *)) {
+        currentSafeAreaBottom = YBIBSafeAreaBottomHeight();
+    }
+
+    CGFloat bottomMargin;
+    if (currentSafeAreaBottom > 20) {
+        // 全面屏设备（iPhone X 及以上）
+        if (UIDeviceOrientationIsPortrait(orientation)) {
+            // 竖屏：播放条紧贴安全区域上沿
+            bottomMargin = 0;
+        } else {
+            // 横屏：适度上移，避免过于贴边
+            bottomMargin = 8;
+        }
+    } else if (currentSafeAreaBottom > 0) {
+        // 小安全区域设备，适度优化
+        bottomMargin = 8;
+    } else {
+        // 旧设备或无安全区域，保持原有合理间距
+        bottomMargin = 12;
+    }
+
+    CGFloat actionBarY = height - [YBIBVideoActionBar defaultHeight] - padding.bottom - bottomMargin;
+    self.actionBar.frame = CGRectMake(padding.left, actionBarY, width, [YBIBVideoActionBar defaultHeight]);
+
     self.playButton.center = CGPointMake(containerSize.width / 2.0, containerSize.height / 2.0);
     _playerLayer.frame = (CGRect){CGPointZero, containerSize};
 }
@@ -95,6 +123,18 @@
 
 - (void)hidePlayButton {
     self.playButton.hidden = YES;
+}
+
+- (void)updatePlayButtonVisibility {
+    // 根据 autoPlayCount 决定播放按钮的显示状态
+    BOOL shouldHidePlayButton = (self.autoPlayCount > 0 || self.autoPlayCount == NSUIntegerMax);
+    self.playButton.hidden = shouldHidePlayButton;
+}
+
+- (void)setAutoPlayCount:(NSUInteger)autoPlayCount {
+    _autoPlayCount = autoPlayCount;
+    // 更新播放按钮的可见性
+    [self updatePlayButtonVisibility];
 }
 
 #pragma mark - private
@@ -344,18 +384,17 @@
     if (!asset) return;
     if (self.needAutoPlay) {
         if (![self autoPlay]) {
+            // 自动播放失败，显示播放按钮
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.playButton.hidden = NO;
             });
         }
         self.needAutoPlay = NO;
     } else {
-        // 只有在 autoPlayCount 为 0 时才显示播放按钮（表示不会自动播放）
-        if (self.autoPlayCount == 0) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.playButton.hidden = NO;
-            });
-        }
+        // 不需要自动播放，根据 autoPlayCount 更新播放按钮状态
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updatePlayButtonVisibility];
+        });
     }
 }
 - (AVAsset *)asset {
@@ -389,7 +428,10 @@
         _playButton.bounds = CGRectMake(0, 0, 100, 100);
         [_playButton setImage:YBIBIconManager.sharedManager.videoBigPlayImage() forState:UIControlStateNormal];
         [_playButton addTarget:self action:@selector(clickPlayButton:) forControlEvents:UIControlEventTouchUpInside];
-        _playButton.hidden = YES;
+
+        // 根据 autoPlayCount 决定初始状态：如果会自动播放，则隐藏播放按钮
+        _playButton.hidden = (self.autoPlayCount > 0 || self.autoPlayCount == NSUIntegerMax);
+
         _playButton.layer.shadowColor = UIColor.darkGrayColor.CGColor;
         _playButton.layer.shadowOffset = CGSizeMake(0, 1);
         _playButton.layer.shadowOpacity = 1;

@@ -85,7 +85,48 @@ CGFloat YBIBStatusbarHeight(void) {
 CGFloat YBIBSafeAreaBottomHeight(void) {
     CGFloat bottom = 0;
     if (@available(iOS 11.0, *)) {
-        bottom = UIApplication.sharedApplication.delegate.window.safeAreaInsets.bottom;
+        // 尝试从 delegate.window 获取
+        UIWindow *window = UIApplication.sharedApplication.delegate.window;
+        if (window) {
+            bottom = window.safeAreaInsets.bottom;
+        }
+
+        // 如果获取失败，尝试从 keyWindow 获取
+        if (bottom <= 0) {
+            UIWindow *keyWindow = UIApplication.sharedApplication.keyWindow;
+            if (keyWindow) {
+                bottom = keyWindow.safeAreaInsets.bottom;
+            }
+        }
+
+        // 如果还是获取失败，尝试从所有 window 中获取
+        if (bottom <= 0) {
+            for (UIWindow *window in UIApplication.sharedApplication.windows) {
+                if (window.isKeyWindow) {
+                    bottom = window.safeAreaInsets.bottom;
+                    break;
+                }
+            }
+        }
+
+        // 基于屏幕尺寸的容错（对于全面屏设备）
+        if (bottom <= 0) {
+            CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
+            if (screenHeight >= 812) {
+                // iPhone X 及以上设备的典型安全区域高度
+                if (screenHeight == 812) {
+                    bottom = 34; // iPhone X, 12/13 Pro
+                } else if (screenHeight == 896) {
+                    bottom = 34; // iPhone XR, 11
+                } else if (screenHeight == 926) {
+                    bottom = 34; // iPhone 12/13 Pro Max, 14/15 Pro
+                } else if (screenHeight == 932) {
+                    bottom = 34; // iPhone 14/15 Plus
+                } else if (screenHeight >= 960) {
+                    bottom = 34; // iPhone 14/15 Pro Max 及以上
+                }
+            }
+        }
     }
     return bottom;
 }
