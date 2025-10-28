@@ -136,13 +136,16 @@
 - (void)startPlay {
     if (_player) {
         _playing = YES;
-        
+
         [_player play];
         [self.actionBar play];
-        
+
         self.topBar.hidden = NO;
         self.actionBar.hidden = NO;
-        
+
+        // 确保播放按钮被隐藏
+        self.playButton.hidden = YES;
+
         [self.delegate yb_startPlayForVideoView:self];
     }
 }
@@ -326,6 +329,12 @@
         [self autoPlay];
     } else {
         _needAutoPlay = needAutoPlay;
+        // 如果不需要自动播放，且不在播放状态，确保显示播放按钮
+        if (!needAutoPlay && !_playing && !_preparingPlay) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.playButton.hidden = NO;
+            });
+        }
     }
 }
 
@@ -341,12 +350,9 @@
         }
         self.needAutoPlay = NO;
     } else {
-        // 只有在没有准备播放时才显示播放按钮
-        if (!_preparingPlay && !_playing) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.playButton.hidden = NO;
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.playButton.hidden = NO;
+        });
     }
 }
 - (AVAsset *)asset {
