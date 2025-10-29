@@ -255,7 +255,6 @@
 }
 
 - (void)yb_startPlayForVideoView:(YBIBVideoView *)view {
-    self.videoView.thumbImageView.hidden = YES;
     [self.yb_backView ybib_videoPlayingAdd:self];
     [self.yb_auxiliaryViewHandler() yb_hideLoadingWithContainer:self];
     [self hideToolViews:YES];
@@ -275,10 +274,14 @@
 
 - (void)yb_finishPlayForVideoView:(YBIBVideoView *)view {
     [self.yb_backView ybib_videoPlayingRemove:self];
+    // 重新显示封面图片
+    self.videoView.thumbImageView.hidden = NO;
     [self hideToolViews:NO];
 }
 
 - (void)yb_playFailedForVideoView:(YBIBVideoView *)view {
+    // 播放失败时重新显示封面
+    self.videoView.thumbImageView.hidden = NO;
     [self.yb_auxiliaryViewHandler() yb_hideLoadingWithContainer:self];
     [self.yb_auxiliaryViewHandler() yb_showIncorrectToastWithContainer:self text:YBIBCopywriter.sharedCopywriter.videoError];
 }

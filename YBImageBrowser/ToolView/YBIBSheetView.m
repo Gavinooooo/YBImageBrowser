@@ -29,12 +29,14 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = UIColor.whiteColor;
+        self.contentView.backgroundColor = UIColor.whiteColor;
         _titleLabel = [UILabel new];
-        _titleLabel.textColor = UIColor.darkTextColor;
+        _titleLabel.textColor = UIColor.blackColor;
         _titleLabel.font = [UIFont fontWithName:@"Avenir-Medium" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _line = [CALayer new];
-        _line.backgroundColor = UIColor.groupTableViewBackgroundColor.CGColor;
+        _line.backgroundColor = [UIColor colorWithRed:0.85 green:0.85 blue:0.85 alpha:1.0].CGColor;
         [self.contentView addSubview:_titleLabel];
         [self.contentView.layer addSublayer:_line];
     }
@@ -192,7 +194,7 @@ static CGFloat kOffsetSpace = 5;
         _tableView.estimatedRowHeight = 44;
         _tableView.estimatedSectionFooterHeight = 0;
         _tableView.estimatedSectionHeaderHeight = 0;
-        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.backgroundColor = UIColor.whiteColor;
         _tableView.alwaysBounceVertical = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         if (@available(iOS 11.0, *)) {

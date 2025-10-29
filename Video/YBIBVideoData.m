@@ -20,9 +20,18 @@ extern CGImageRef YYCGImageCreateDecodedCopy(CGImageRef imageRef, BOOL decodeFor
 
 @implementation YBIBVideoData {
     NSURLSessionDownloadTask *_downloadTask;
+    id _downloadToken;
+    id<YBIBWebImageMediator> (^_yb_webImageMediator)(void);
 }
 
 #pragma mark - life cycle
+
+- (void)dealloc {
+    [_downloadTask cancel];
+    if (self.yb_webImageMediator && _downloadToken) {
+        [self.yb_webImageMediator() yb_cancelTaskWithDownloadToken:_downloadToken];
+    }
+}
 
 - (instancetype)init {
     self = [super init];
@@ -80,6 +89,8 @@ extern CGImageRef YYCGImageCreateDecodedCopy(CGImageRef imageRef, BOOL decodeFor
 - (void)loadThumbImage {
     if (self.thumbImage) {
         [self.delegate yb_videoData:self readyForThumbImage:self.thumbImage];
+    } else if (self.thumbImageUrl) {
+        [self loadThumbImageFromURL];
     } else if (self.projectiveView && [self.projectiveView isKindOfClass:UIImageView.self]) {
         YBIB_DISPATCH_ASYNC_MAIN(^{
             UIImage *image = ((UIImageView *)self.projectiveView).image;
@@ -94,6 +105,137 @@ extern CGImageRef YYCGImageCreateDecodedCopy(CGImageRef imageRef, BOOL decodeFor
         [self loadThumbImage_firstFrame];
     }
 }
+
+- (void)loadThumbImageFromURL {
+    if (!self.thumbImageUrl) return;
+
+    // 检查是否为本地文件路径
+    if (self.thumbImageUrl.isFileURL) {
+        [self loadThumbImageFromLocalPath];
+        return;
+    }
+
+    // 参考 YBIBImageData 的实现，优先使用 webImageMediator
+    if (self.yb_webImageMediator) {
+        __weak typeof(self) wSelf = self;
+        [self.yb_webImageMediator() yb_queryCacheOperationForKey:self.thumbImageUrl completed:^(UIImage * _Nullable image, NSData * _Nullable imageData) {
+            __strong typeof(wSelf) self = wSelf;
+            if (!self) return;
+
+            UIImage *thumbImage;
+            if (image) {
+                // 缓存中有现成的图片
+                thumbImage = image;
+            } else if (imageData) {
+                // 缓存中有图片数据，转换为 UIImage
+                thumbImage = [UIImage imageWithData:imageData];
+            }
+
+            if (thumbImage) {
+                // 缓存命中，直接使用
+                self.thumbImage = thumbImage;
+                [self.delegate yb_videoData:self readyForThumbImage:thumbImage];
+            } else {
+                // 缓存未命中，开始下载
+                [self downloadThumbImageWithMediator];
+            }
+        }];
+    } else {
+        // 没有设置 webImageMediator，使用默认下载方式
+        [self downloadThumbImageDefault];
+    }
+}
+
+- (void)loadThumbImageFromLocalPath {
+    if (!self.thumbImageUrl || !self.thumbImageUrl.isFileURL) return;
+
+    YBIB_DISPATCH_ASYNC(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage *image = [UIImage imageWithContentsOfFile:self.thumbImageUrl.path];
+
+        YBIB_DISPATCH_ASYNC_MAIN(^{
+            if (image) {
+                self.thumbImage = image;
+                [self.delegate yb_videoData:self readyForThumbImage:image];
+            } else {
+                // 本地图片加载失败，回退到从视频第一帧提取
+                [self loadThumbImage_firstFrame];
+            }
+        });
+    });
+}
+
+- (void)downloadThumbImageWithMediator {
+    if (!self.yb_webImageMediator || !self.thumbImageUrl) {
+        [self loadThumbImage_firstFrame];
+        return;
+    }
+
+    __weak typeof(self) wSelf = self;
+    _downloadToken = [self.yb_webImageMediator() yb_downloadImageWithURL:self.thumbImageUrl
+                                                            requestModifier:nil
+                                                                   progress:nil
+                                                                    success:^(NSData * _Nullable imageData, BOOL finished) {
+        if (!finished) return;
+
+        __strong typeof(wSelf) self = wSelf;
+        if (!self) return;
+
+        UIImage *image = imageData ? [UIImage imageWithData:imageData] : nil;
+        if (image) {
+            // 参考 YBIBImageData：下载成功后存储到磁盘
+            [self.yb_webImageMediator() yb_storeToDiskWithImageData:imageData forKey:self.thumbImageUrl];
+
+            self.thumbImage = image;
+            [self.delegate yb_videoData:self readyForThumbImage:image];
+            return;
+        }
+
+        // 下载失败，回退到从视频第一帧提取
+        [self loadThumbImage_firstFrame];
+    } failed:^(NSError * _Nullable error, BOOL finished) {
+        if (!finished) return;
+
+        __strong typeof(wSelf) self = wSelf;
+        if (!self) return;
+
+        // 下载失败，回退到从视频第一帧提取
+        [self loadThumbImage_firstFrame];
+    }];
+}
+
+- (void)downloadThumbImageDefault {
+    if (!self.thumbImageUrl) return;
+
+    __weak typeof(self) wSelf = self;
+    YBIB_DISPATCH_ASYNC(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURLRequest *request = [NSURLRequest requestWithURL:self.thumbImageUrl
+                                                 cachePolicy:NSURLRequestUseProtocolCachePolicy
+                                             timeoutInterval:15];
+
+        NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request
+                                                                     completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+            YBIB_DISPATCH_ASYNC_MAIN(^{
+                __strong typeof(wSelf) self = wSelf;
+                if (!self) return;
+
+                if (!error && data) {
+                    UIImage *image = [UIImage imageWithData:data];
+                    if (image) {
+                        self.thumbImage = image;
+                        [self.delegate yb_videoData:self readyForThumbImage:self.thumbImage];
+                        return;
+                    }
+                }
+
+                // 网络加载失败，回退到从视频第一帧提取
+                [self loadThumbImage_firstFrame];
+            });
+        }];
+
+        [task resume];
+    });
+}
+
 - (void)loadThumbImage_firstFrame {
     if (!self.videoAVAsset) return;
     if (self.isLoadingFirstFrame) {
@@ -137,6 +279,7 @@ extern CGImageRef YYCGImageCreateDecodedCopy(CGImageRef imageRef, BOOL decodeFor
 @synthesize yb_containerSize = _yb_containerSize;
 @synthesize yb_isHideTransitioning = _yb_isHideTransitioning;
 @synthesize yb_auxiliaryViewHandler = _yb_auxiliaryViewHandler;
+@synthesize yb_webImageMediator = _yb_webImageMediator;
 
 - (nonnull Class)yb_classOfCell {
     return YBIBVideoCell.self;

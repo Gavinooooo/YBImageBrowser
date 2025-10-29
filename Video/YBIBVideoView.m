@@ -186,6 +186,11 @@
         // 确保播放按钮被隐藏
         self.playButton.hidden = YES;
 
+        // 在真正开始播放时隐藏封面，避免黑屏闪烁
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.thumbImageView.hidden = YES;
+        });
+
         [self.delegate yb_startPlayForVideoView:self];
     }
 }
@@ -195,9 +200,12 @@
     [self.actionBar setCurrentValue:0];
     self.actionBar.hidden = YES;
     self.topBar.hidden = YES;
-    
+
+    // 重新显示封面图片（播放结束或播放失败时）
+    self.thumbImageView.hidden = NO;
+
     _playing = NO;
-    
+
     [self.delegate yb_finishPlayForVideoView:self];
 }
 
